@@ -257,8 +257,8 @@
             .data(data)
             .enter()
             .append("circle")
-            .attr("cx", d => (d.x-5)*80)
-            .attr("cy", d => (10-d.y)*80)
+            .attr("cx", d => (d.x-5)*100)
+            .attr("cy", d => (9-d.y)*100)
             .attr("r", 5)
             .attr("fill", d => color(d.cluster))
             .on("click", (event, d) => {
@@ -277,6 +277,22 @@
                     .duration(500)
                     .style("opacity", 0);
             });
+
+
+        const pointsToLabel = [0, 32, 85, 133, 151, 155, 156, 173];
+
+        // Filter the data array to include only the points with the specified indices
+        const labeledData = data.filter((_, index) => pointsToLabel.includes(index));
+
+        const labels = svg.selectAll(".label")
+            .data(labeledData)
+            .enter()
+            .append("text")
+            .attr("x", d => (d.x-5)*100 + 1)
+            .attr("y", d => (9-d.y)*100 + 0.5)
+            .text(d => d.text)
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "12px");
     </script>
 </body>
 </html>
