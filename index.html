@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .tooltip {
+            position: absolute;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            padding: 5px;
+            pointer-events: none;
+            font-family: sans-serif;
+        }
+    </style>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+<body>
+    <script>
+        const data = [
+{ x: 10.577717781066895, y: 4.672209739685059, text: "Adept", url: "http://www.adept.ai", cluster: 0 },
+{ x: 9.938509941101074, y: 6.554399013519287, text: "Adflow", url: "https://www.adflow.ai", cluster: 2 },
+{ x: 7.330140113830566, y: 7.346994876861572, text: "Aflorithmic Labs", url: "http://www.aflorithmic.ai", cluster: 7 },
+{ x: 8.877641677856445, y: 5.052952289581299, text: "AI Dungeon", url: "http://www.latitude.io", cluster: 0 },
+{ x: 10.760441780090332, y: 6.059066295623779, text: "AI2SQL", url: "https://www.ai2sql.io", cluster: 2 },
+{ x: 10.390456199645996, y: 5.40334415435791, text: "AI21 Labs", url: "http://www.ai21.com", cluster: 0 },
+{ x: 11.92615795135498, y: 5.329141616821289, text: "Aide", url: "http://www.aide.app", cluster: 6 },
+{ x: 6.991720676422119, y: 7.248464107513428, text: "Aimi", url: "http://www.aimi.fm", cluster: 7 },
+{ x: 11.255213737487793, y: 5.697767734527588, text: "AirPaper", url: "https://airpaper.ai", cluster: 11 },
+{ x: 7.039699554443359, y: 7.2871928215026855, text: "Aiva Technologies", url: "http://www.aiva.ai", cluster: 7 },
+{ x: 10.135238647460938, y: 3.46972393989563, text: "AiXcoder", url: "http://www.aixcoder.com", cluster: 5 },
+{ x: 7.99837589263916, y: 6.653336524963379, text: "Alethea AI", url: "http://www.alethea.ai", cluster: 0 },
+{ x: 11.41274356842041, y: 5.403443813323975, text: "Algomo", url: "http://www.algomo.com", cluster: 6 },
+{ x: 7.39320182800293, y: 7.954647064208984, text: "Altered", url: "http://www.altered.ai", cluster: 7 },
+{ x: 7.631956100463867, y: 7.491361618041992, text: "AMAI", url: "http://www.amai.io", cluster: 7 },
+{ x: 8.924543380737305, y: 4.798284530639648, text: "Andi", url: "http://www.andisearch.com", cluster: 8 },
+{ x: 9.318359375, y: 4.123582363128662, text: "Anima", url: "http://www.animaapp.com", cluster: 5 },
+{ x: 10.550728797912598, y: 7.004667282104492, text: "Anyword", url: "http://www.anyword.com", cluster: 2 },
+{ x: 11.899751663208008, y: 4.840657711029053, text: "AskAI", url: "http://www.ask-ai.com", cluster: 0 },
+{ x: 9.845808029174805, y: 3.5374021530151367, text: "AskCodi", url: "http://www.askcodi.com", cluster: 5 },
+{ x: 9.580547332763672, y: 4.756879806518555, text: "Augmenta", url: "http://www.augmenta.ai", cluster: 5 },
+{ x: 10.02375602722168, y: 3.3290951251983643, text: "Augoor", url: "http://www.augoor.com", cluster: 5 },
+{ x: 12.002607345581055, y: 6.960219860076904, text: "AutoBound", url: "http://www.autobound.ai", cluster: 6 },
+{ x: 10.223393440246582, y: 7.141263961791992, text: "Automata", url: "http://www.byautomata.io", cluster: 6 },
+{ x: 11.078919410705566, y: 5.507637977600098, text: "AutoRegex", url: "http://www.autoregex.xyz", cluster: 12 },
+{ x: 9.995139122009277, y: 4.267667770385742, text: "Banana.dev", url: "http://www.banana.dev", cluster: 4 },
+{ x: 6.807865619659424, y: 7.4454474449157715, text: "Boomy", url: "http://www.boomy.com", cluster: 7 },
+{ x: 9.867356300354004, y: 5.213906288146973, text: "Brain.ai", url: "http://www.brain.ai", cluster: 0 },
+{ x: 9.169685363769531, y: 5.2503156661987305, text: "Bria", url: "https://bria.ai", cluster: 4 },
+{ x: 7.868757247924805, y: 8.318998336791992, text: "Canny AI", url: "http://www.cannyai.com", cluster: 12 },
+{ x: 11.392189979553223, y: 5.835208892822266, text: "Casetext", url: "http://www.casetext.com", cluster: 0 },
+{ x: 10.90255355834961, y: 4.968545913696289, text: "Chai.ml", url: "https://chai.ml", cluster: 0 },
+{ x: 8.859837532043457, y: 4.897068500518799, text: "Character.ai", url: "https://beta.character.ai", cluster: 0 },
+{ x: 8.249870300292969, y: 6.849837303161621, text: "Charisma.ai", url: "http://charisma.ai", cluster: 0 },
+{ x: 10.112266540527344, y: 6.232077121734619, text: "Clickable", url: "https://www.clickable.so", cluster: 6 },
+{ x: 8.966089248657227, y: 6.457281589508057, text: "ClipDrop", url: "http://www.clipdrop.co", cluster: 4 },
+{ x: 9.949761390686035, y: 3.3575599193573, text: "Codiga", url: "http://www.codiga.io", cluster: 5 },
+{ x: 12.216104507446289, y: 5.341212749481201, text: "Cogram", url: "http://www.cogram.com", cluster: 11 },
+{ x: 11.125926971435547, y: 4.2217020988464355, text: "Cohere", url: "http://www.cohere.ai", cluster: 8 },
+{ x: 8.60915470123291, y: 7.646614074707031, text: "Colossyan", url: "http://www.colossyan.com", cluster: 1 },
+{ x: 10.9544095993042, y: 6.493930339813232, text: "Compose AI", url: "http://www.compose.ai", cluster: 2 },
+{ x: 9.804994583129883, y: 7.738396644592285, text: "Contenda", url: "http://www.contenda.co", cluster: 1 },
+{ x: 11.032628059387207, y: 7.184617042541504, text: "Contentbot.ai", url: "http://www.contentbot.ai", cluster: 2 },
+{ x: 11.218339920043945, y: 6.590673923492432, text: "Copy.ai", url: "http://www.copy.ai", cluster: 2 },
+{ x: 10.569249153137207, y: 7.355147361755371, text: "Copysmith Artificial Intelligence", url: "http://www.copysmith.ai", cluster: 1 },
+{ x: 10.935637474060059, y: 7.291729927062988, text: "Craftly.ai", url: "http://craftly.ai", cluster: 2 },
+{ x: 11.74925708770752, y: 6.870281219482422, text: "Creatext", url: "http://www.creatext.ai", cluster: 6 },
+{ x: 11.88264274597168, y: 4.204740047454834, text: "Dala", url: "http://www.dala.ai", cluster: 8 },
+{ x: 7.351109981536865, y: 5.655953884124756, text: "Datagen", url: "http://www.datagen.tech", cluster: 3 },
+{ x: 9.606548309326172, y: 4.175416469573975, text: "Debuild", url: "http://www.debuild.app", cluster: 5 },
+{ x: 8.319777488708496, y: 8.141440391540527, text: "DeepDub", url: "http://www.deepdub.ai", cluster: 12 },
+{ x: 8.85314655303955, y: 4.869207382202148, text: "DeepGenX", url: "https://www.deepgenx.com", cluster: 5 },
+{ x: 11.134112358093262, y: 4.263700485229492, text: "Deepset", url: "http://www.deepset.ai", cluster: 0 },
+{ x: 9.77900505065918, y: 7.639654159545898, text: "Descript", url: "http://www.descript.com", cluster: 11 },
+{ x: 9.489826202392578, y: 3.7589478492736816, text: "DhiWise", url: "http://www.dhiwise.com", cluster: 5 },
+{ x: 10.413735389709473, y: 7.504327774047852, text: "Draft.", url: "http://draft.co", cluster: 2 },
+{ x: 8.182744026184082, y: 8.087640762329102, text: "DubDub", url: "http://www.dubdub.ai", cluster: 12 },
+{ x: 10.44559097290039, y: 6.119534969329834, text: "Durable", url: "http://www.durable.co", cluster: 2 },
+{ x: 10.928674697875977, y: 4.034985065460205, text: "Dust.tt", url: "http://www.dust.tt", cluster: 8 },
+{ x: 8.147355079650879, y: 8.324739456176758, text: "Elai.io", url: "http://www.elai.io", cluster: 12 },
+{ x: 8.145930290222168, y: 8.2772798538208, text: "Eleven Labs", url: "http://www.elevenlabs.io", cluster: 12 },
+{ x: 8.639747619628906, y: 7.1320061683654785, text: "EmbodyMe", url: "http://embodyme.com", cluster: 0 },
+{ x: 12.553979873657227, y: 4.753342628479004, text: "Enterpret", url: "http://www.enterpret.com", cluster: 11 },
+{ x: 9.478541374206543, y: 3.7581839561462402, text: "Enzyme", url: "http://www.enzyme.so", cluster: 5 },
+{ x: 10.996788024902344, y: 4.274779796600342, text: "Explosion", url: "http://www.explosion.ai", cluster: 0 },
+{ x: 8.829792022705078, y: 5.905322074890137, text: "Facet", url: "http://www.facet.ai", cluster: 4 },
+{ x: 9.528288841247559, y: 4.997354984283447, text: "Fertmat_WS", url: "http://www.batou.xyz", cluster: 5 },
+{ x: 8.288195610046387, y: 7.854422092437744, text: "Flawless", url: "http://www.flawlessai.com", cluster: 12 },
+{ x: 11.87639331817627, y: 6.5353684425354, text: "Flowrite", url: "http://www.flowrite.com", cluster: 6 },
+{ x: 11.399691581726074, y: 4.603524208068848, text: "Forefront", url: "http://www.forefront.ai", cluster: 0 },
+{ x: 10.939207077026367, y: 7.342750549316406, text: "Foster", url: "http://www.foster.to", cluster: 2 },
+{ x: 11.973222732543945, y: 6.292080879211426, text: "Fridayy", url: "http://www.fridayy.me", cluster: 10 },
+{ x: 8.52564811706543, y: 6.971217155456543, text: "Gemsouls", url: "http://www.mygemsouls.com", cluster: 0 },
+{ x: 7.973560810089111, y: 5.734438419342041, text: "Geniverse", url: "http://geniverse.co", cluster: 0 },
+{ x: 11.966057777404785, y: 3.96797251701355, text: "Glean", url: "http://www.glean.com", cluster: 8 },
+{ x: 7.436107158660889, y: 5.557188034057617, text: "Gretel", url: "http://www.gretel.ai", cluster: 3 },
+{ x: 10.9440336227417, y: 5.962950706481934, text: "Harvey", url: "http://www.harvey.ai", cluster: 0 },
+{ x: 11.789576530456543, y: 3.7795166969299316, text: "Hebbia.ai", url: "http://www.hebbia.ai", cluster: 8 },
+{ x: 11.09894847869873, y: 3.2451345920562744, text: "Hello", url: "http://beta.sayhello.so", cluster: 8 },
+{ x: 8.815152168273926, y: 7.543409824371338, text: "Hour One", url: "http://www.hourone.ai", cluster: 1 },
+{ x: 10.564008712768555, y: 4.382649898529053, text: "HuggingFace", url: "http://www.huggingface.co", cluster: 0 },
+{ x: 11.447407722473145, y: 4.658144950866699, text: "HumanLoop", url: "http://www.humanloop.com", cluster: 11 },
+{ x: 10.871305465698242, y: 4.991212844848633, text: "Inflection", url: "http://www.inflection.ai", cluster: 0 },
+{ x: 10.727398872375488, y: 7.042184352874756, text: "Instoried", url: "http://www.instoried.com", cluster: 2 },
+{ x: 8.5443754196167, y: 5.794605255126953, text: "InteriorAI", url: "http://www.interiorai.com", cluster: 4 },
+{ x: 10.726343154907227, y: 7.300500392913818, text: "Jasper", url: "http://www.jasper.ai", cluster: 2 },
+{ x: 10.746313095092773, y: 4.011074542999268, text: "Jina.ai", url: "http://www.jina.ai", cluster: 8 },
+{ x: 10.39895248413086, y: 3.4214460849761963, text: "K-Explorer ", url: "http://nothing", cluster: 8 },
+{ x: 12.117816925048828, y: 5.516195297241211, text: "Kaizan", url: "http://kaizan.ai", cluster: 6 },
+{ x: 12.016215324401855, y: 5.900518894195557, text: "Kalendar AI", url: "http://www.kalendar.ai", cluster: 10 },
+{ x: 9.846431732177734, y: 3.56575608253479, text: "Kite", url: "http://www.kite.com", cluster: 5 },
+{ x: 8.450547218322754, y: 6.116641998291016, text: "Lalaland.ai", url: "http://www.lalaland.ai", cluster: 4 },
+{ x: 12.014100074768066, y: 6.763068675994873, text: "Lavender", url: "http://www.lavender.ai", cluster: 6 },
+{ x: 10.98652458190918, y: 7.259662628173828, text: "Lex", url: "http://Lex.page", cluster: 2 },
+{ x: 11.877958297729492, y: 4.761819839477539, text: "Lexata", url: "https://lexata.ca", cluster: 11 },
+{ x: 9.522175788879395, y: 4.200392723083496, text: "Locofy", url: "http://www.locofy.ai", cluster: 4 },
+{ x: 12.396803855895996, y: 4.677992820739746, text: "LoopPanel", url: "http://www.looppanel.com", cluster: 11 },
+{ x: 9.387106895446777, y: 6.650738716125488, text: "MagicEducator", url: "http://www.magiceducator.com", cluster: 11 },
+{ x: 12.561524391174316, y: 4.756015777587891, text: "ManageBetter", url: "https://managebetter.com", cluster: 11 },
+{ x: 10.178454399108887, y: 4.356490612030029, text: "Mantium", url: "http://www.mantiumai.com", cluster: 8 },
+{ x: 11.702855110168457, y: 3.3934760093688965, text: "Marqo", url: "http://www.marqo.ai", cluster: 8 },
+{ x: 10.847762107849121, y: 4.631438732147217, text: "Maya Labs", url: "http://www.mayalabs.io", cluster: 0 },
+{ x: 12.287418365478516, y: 5.289937973022461, text: "Mem.ai", url: "http://get.mem.ai", cluster: 0 },
+{ x: 11.169178009033203, y: 3.281792163848877, text: "Metaphor", url: "http://metaphor.so", cluster: 8 },
+{ x: 11.024413108825684, y: 4.547389507293701, text: "Midjourney", url: "http://www.midjourney.com", cluster: 9 },
+{ x: 9.553770065307617, y: 3.690852642059326, text: "Mintlify", url: "http://www.mintlify.com", cluster: 11 },
+{ x: 8.229569435119629, y: 5.725811958312988, text: "MirageML", url: "http://www.mirageml.com", cluster: 4 },
+{ x: 8.534775733947754, y: 6.164721965789795, text: "ModelMe", url: "http://www.modelme.tech", cluster: 4 },
+{ x: 9.094680786132812, y: 6.224263668060303, text: "Modyfi", url: "http://www.modyfi.io", cluster: 4 },
+{ x: 12.409631729125977, y: 4.967148780822754, text: "Monterey", url: "http://www.monterey.ai", cluster: 11 },
+{ x: 9.718707084655762, y: 7.568089008331299, text: "Munch", url: "http://www.mnch.co", cluster: 1 },
+{ x: 7.45097541809082, y: 7.727200984954834, text: "Murf.Ai", url: "http://www.murf.ai", cluster: 7 },
+{ x: 10.112061500549316, y: 3.9575164318084717, text: "Mutable.ai", url: "http://www.Mutable.ai", cluster: 5 },
+{ x: 11.299262046813965, y: 5.109278678894043, text: "Nabla", url: "http://www.nabla.com", cluster: 11 },
+{ x: 10.563905715942383, y: 5.278446197509766, text: "Native Chats", url: "http://www.nativechats.com", cluster: 8 },
+{ x: 11.346726417541504, y: 3.413012981414795, text: "Needl", url: "http://www.needl.tech", cluster: 8 },
+{ x: 11.468173027038574, y: 3.822683572769165, text: "Nuclia", url: "http://nuclia.com", cluster: 8 },
+{ x: 12.318652153015137, y: 5.829775333404541, text: "Oliv", url: "http://www.oliv.ai", cluster: 11 },
+{ x: 9.749921798706055, y: 6.060914516448975, text: "Omneky", url: "http://www.omneky.com", cluster: 6 },
+{ x: 10.622706413269043, y: 4.73366641998291, text: "One AI", url: "http://www.oneai.com", cluster: 0 },
+{ x: 12.43506908416748, y: 4.589294910430908, text: "OnLoop", url: "http://www.onloop.com", cluster: 11 },
+{ x: 11.227812767028809, y: 3.2034339904785156, text: "Operand", url: "http://www.operand.ai", cluster: 8 },
+{ x: 7.684586048126221, y: 5.614497661590576, text: "Orby", url: "http://www.datagen.tech", cluster: 3 },
+{ x: 9.216997146606445, y: 5.9457621574401855, text: "Osmosis.studio", url: "http://www.Osmosis.studio", cluster: 4 },
+{ x: 11.00766372680664, y: 6.932016372680664, text: "OthersideAI", url: "http://www.othersideai.com", cluster: 2 },
+{ x: 8.257232666015625, y: 8.181095123291016, text: "PaperCup", url: "http://www.papercup.com", cluster: 12 },
+{ x: 11.023979187011719, y: 6.974794387817383, text: "Patent Blast", url: "https://patentblast.com", cluster: 2 },
+{ x: 10.993281364440918, y: 6.8178277015686035, text: "PatentPal", url: "http://www.patentpal.com", cluster: 2 },
+{ x: 9.737346649169922, y: 7.675848960876465, text: "Peech", url: "http://www.peech-ai.com", cluster: 1 },
+{ x: 9.821410179138184, y: 6.485002517700195, text: "Pencil", url: "http://www.trypencil.com", cluster: 2 },
+{ x: 10.004722595214844, y: 7.509833335876465, text: "Pepper Content", url: "http://www.peppercontent.io", cluster: 1 },
+{ x: 8.93745231628418, y: 6.31063985824585, text: "Photoroom", url: "http://www.photoroom.com", cluster: 4 },
+{ x: 9.413073539733887, y: 7.182672023773193, text: "Pictory", url: "http://pictory.ai", cluster: 1 },
+{ x: 11.801587104797363, y: 3.1839466094970703, text: "Pinecone", url: "http://www.pinecone.io", cluster: 8 },
+{ x: 7.68120002746582, y: 7.530467510223389, text: "Play.ht", url: "http://play.ht", cluster: 7 },
+{ x: 8.098296165466309, y: 5.890770435333252, text: "Poly", url: "http://www.withpoly.com", cluster: 4 },
+{ x: 11.537348747253418, y: 5.374329566955566, text: "PolyAI", url: "http://www.poly.ai", cluster: 10 },
+{ x: 11.495404243469238, y: 7.020326614379883, text: "PR Guy", url: "http://www.prguy.io", cluster: 6 },
+{ x: 11.970662117004395, y: 4.245203971862793, text: "Pragma", url: "http://www.pragma.ai", cluster: 11 },
+{ x: 11.946639060974121, y: 4.23307991027832, text: "Primer", url: "http://www.primer.ai", cluster: 8 },
+{ x: 9.278077125549316, y: 4.083251953125, text: "Pygma", url: "http://www.pygma.app", cluster: 5 },
+{ x: 11.665037155151367, y: 3.2242591381073, text: "Qdrant", url: "http://www.qdrant.tech", cluster: 8 },
+{ x: 11.229837417602539, y: 5.211451530456543, text: "QuickChat", url: "https://www.quickchat.ai", cluster: 0 },
+{ x: 11.874799728393555, y: 6.872616767883301, text: "Reach", url: "https://www.magicreach.ai", cluster: 6 },
+{ x: 9.331714630126953, y: 7.594725131988525, text: "Recut", url: "http://www.getrecut.io", cluster: 6 },
+{ x: 9.587806701660156, y: 7.625227451324463, text: "Reduct.Video", url: "http://www.reduct.video", cluster: 11 },
+{ x: 11.114648818969727, y: 6.675017356872559, text: "Regie.ai", url: "http://www.regie.ai", cluster: 6 },
+{ x: 8.768695831298828, y: 7.231323719024658, text: "Rephrase.ai", url: "http://www.rephrase.ai", cluster: 6 },
+{ x: 7.519965648651123, y: 7.30360221862793, text: "Replica Studios", url: "http://www.replicastudios.com", cluster: 7 },
+{ x: 11.674287796020508, y: 5.317691802978516, text: "Replicant", url: "http://www.replicant.com", cluster: 10 },
+{ x: 10.87878131866455, y: 5.3149800300598145, text: "Replika", url: "http://www.replika.ai", cluster: 0 },
+{ x: 9.93397331237793, y: 3.8908045291900635, text: "Replit", url: "http://www.replit.com", cluster: 5 },
+{ x: 7.570878982543945, y: 7.5097198486328125, text: "Resemble AI", url: "http://www.resemble.ai", cluster: 7 },
+{ x: 7.581369400024414, y: 7.697876930236816, text: "ReSpeecher", url: "http://www.respeecher.com", cluster: 7 },
+{ x: 7.7203497886657715, y: 7.7063140869140625, text: "Rime Labs", url: "https://Rime.ai", cluster: 7 },
+{ x: 7.926699161529541, y: 6.217059135437012, text: "Rosebud", url: "http://www.rosebud.ai", cluster: 4 },
+{ x: 9.104940414428711, y: 6.646230697631836, text: "RunwayML", url: "http://www.runwayml.com", cluster: 4 },
+{ x: 11.151031494140625, y: 7.284281253814697, text: "Rytr", url: "http://www.rytr.me", cluster: 2 },
+{ x: 11.538585662841797, y: 4.971776962280273, text: "Sapling Intelligence", url: "http://www.sapling.ai", cluster: 11 },
+{ x: 7.534683704376221, y: 8.219966888427734, text: "Sayso", url: "http://www.sayso.ai", cluster: 7 },
+{ x: 12.281822204589844, y: 5.704057216644287, text: "Second Nature", url: "http://www.secondnature.ai", cluster: 6 },
+{ x: 9.955426216125488, y: 5.98422384262085, text: "SHO", url: "http://www.sho.ai", cluster: 0 },
+{ x: 9.43138599395752, y: 6.940934181213379, text: "Simplified", url: "http://www.simplified.co", cluster: 1 },
+{ x: 7.365947723388672, y: 8.045310974121094, text: "Skit", url: "http://www.skit.ai", cluster: 7 },
+{ x: 10.403783798217773, y: 4.19625997543335, text: "SliceX AI", url: "http://www.slicex.ai", cluster: 8 },
+{ x: 11.718697547912598, y: 6.833672523498535, text: "SmartWriter", url: "https://www.smartwriter.ai", cluster: 6 },
+{ x: 8.35303783416748, y: 5.624752521514893, text: "Solace Vision", url: "http://www.solacevision.com", cluster: 4 },
+{ x: 7.5948662757873535, y: 7.396829605102539, text: "Sonantic", url: "http://www.sonantic.io", cluster: 7 },
+{ x: 7.769764423370361, y: 7.832192897796631, text: "Soniox", url: "http://www.soniox.com", cluster: 7 },
+{ x: 11.78696346282959, y: 6.912322521209717, text: "SonnetAI", url: "http://www.sonnetai.com", cluster: 6 },
+{ x: 6.931457996368408, y: 7.361496448516846, text: "Soundraw", url: "http://soundraw.io", cluster: 7 },
+{ x: 9.316628456115723, y: 5.0288543701171875, text: "Spiritt", url: "http://www.spiritt.io", cluster: 0 },
+{ x: 6.856024742126465, y: 7.466400146484375, text: "Splash", url: "http://www.splashhq.com", cluster: 7 },
+{ x: 10.520899772644043, y: 4.165834903717041, text: "Stability", url: "http://www.stability.ai", cluster: 0 },
+{ x: 10.748095512390137, y: 6.874876022338867, text: "Stenography", url: "http://www.stenography.dev", cluster: 2 },
+{ x: 8.629634857177734, y: 7.07686185836792, text: "Storytime", url: "http://www.storytime.land", cluster: 1 },
+{ x: 10.386110305786133, y: 6.712347507476807, text: "SudoWrite", url: "http://www.sudowrite.com", cluster: 2 },
+{ x: 9.328906059265137, y: 7.088597297668457, text: "Supercreator", url: "http://www.supercreator.ai/", cluster: 1 },
+{ x: 7.391956329345703, y: 5.974536418914795, text: "Synthesia", url: "http://www.synthesia.io", cluster: 7 },
+{ x: 7.429258346557617, y: 5.72831392288208, text: "Synthesis.ai", url: "http://www.synthesis.ai", cluster: 3 },
+{ x: 7.42371940612793, y: 5.6252241134643555, text: "Syntheticus", url: "http://www.syntheticus.ai", cluster: 3 },
+{ x: 10.141322135925293, y: 3.3690185546875, text: "Tabnine", url: "https://www.tabnine.com", cluster: 5 },
+{ x: 9.152186393737793, y: 7.559356212615967, text: "Tavus", url: "http://www.tavus.io", cluster: 6 },
+{ x: 10.36752700805664, y: 4.920741081237793, text: "Tenyx", url: "http://www.tenyx.com", cluster: 0 },
+{ x: 12.12450885772705, y: 4.696442127227783, text: "Textio", url: "http://www.textio.com", cluster: 11 },
+{ x: 11.341068267822266, y: 6.1903977394104, text: "The Keys", url: "http://www.thekeys.ai", cluster: 0 },
+{ x: 10.25638484954834, y: 6.312987327575684, text: "The.com", url: "http://www.the.com", cluster: 6 },
+{ x: 11.949573516845703, y: 5.828125, text: "Timely", url: "http://www.timelyai.com", cluster: 10 },
+{ x: 11.64350414276123, y: 6.446960926055908, text: "Twain", url: "http://www.usetwain.com", cluster: 6 },
+{ x: 11.703654289245605, y: 5.649997234344482, text: "Tymely", url: "http://www.tymely.ai", cluster: 6 },
+{ x: 11.574874877929688, y: 5.942735195159912, text: "Typewise", url: "http://www.typewise.app", cluster: 6 },
+{ x: 12.36876392364502, y: 4.504760265350342, text: "Unscrambl", url: "http://www.unscrambl.com", cluster: 11 },
+{ x: 10.511610984802246, y: 6.0508222579956055, text: "Unstructured.ai", url: "http://www.unstructured.ai", cluster: 0 },
+{ x: 11.545939445495605, y: 3.502653121948242, text: "Vectara", url: "http://www.vectara.com", cluster: 8 },
+{ x: 11.80349349975586, y: 3.4212095737457275, text: "Vespa", url: "http://www.vespa.ai", cluster: 8 },
+{ x: 12.464934349060059, y: 4.7296576499938965, text: "Viable", url: "http://www.askviable.com", cluster: 11 },
+{ x: 8.501273155212402, y: 5.701443195343018, text: "Vizcom", url: "http://www.vizcom.co", cluster: 4 },
+{ x: 7.3944926261901855, y: 7.752535820007324, text: "Voicemod", url: "http://www.voicemod.net", cluster: 7 },
+{ x: 8.617696762084961, y: 5.885281085968018, text: "Vue.ai", url: "http://www.madstreetden.com", cluster: 4 },
+{ x: 8.071280479431152, y: 7.918642044067383, text: "wavel.ai", url: "http://www.wavel.ai", cluster: 12 },
+{ x: 11.66518783569336, y: 3.1460256576538086, text: "Weaviate", url: "http://www.semi.technology", cluster: 8 },
+{ x: 7.675241947174072, y: 7.960167407989502, text: "WellSaid", url: "http://www.wellsaidlabs.com", cluster: 1 },
+{ x: 9.298103332519531, y: 7.529216766357422, text: "Windsor", url: "http://www.windsor.io", cluster: 6 },
+{ x: 10.919867515563965, y: 5.198688983917236, text: "Woebot", url: "http://www.woebothealth.com", cluster: 0 },
+{ x: 8.176079750061035, y: 7.132205009460449, text: "Wombo", url: "http://www.wombo.ai", cluster: 4 },
+{ x: 11.102320671081543, y: 7.170123100280762, text: "Writesonic", url: "http://www.writesonic.com", cluster: 2 },
+{ x: 11.86938190460205, y: 5.585133075714111, text: "Xembly", url: "http://www.xembly.com", cluster: 10 },
+{ x: 11.190987586975098, y: 5.344817161560059, text: "XOKind", url: "http://www.xokind.com", cluster: 8 },
+{ x: 8.90174674987793, y: 4.944685935974121, text: "Xyla", url: "https://xyla.com", cluster: 0 },
+{ x: 10.327259063720703, y: 4.674999237060547, text: "Yurts.ai", url: "http://www.yurts.ai", cluster: 0 },
+{ x: 11.704205513000488, y: 3.164491891860962, text: "Zilliz", url: "http://www.zilliz.com", cluster: 8 },
+{ x: 8.56099796295166, y: 6.057397842407227, text: "ZMO.ai", url: "http://www.zmoai.cn", cluster: 4 }
+
+        ];
+
+        const width = 800;
+        const height = 600;
+
+        const svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        const maxCluster = Math.max(...data.map(d => d.cluster));
+        const minCluster = Math.min(...data.map(d => d.cluster));
+
+        const color = d3.scaleSequential()
+            .domain([minCluster, maxCluster])
+            .interpolator(d3.interpolateRainbow);
+
+        svg.selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", d => (d.x-5)*80)
+            .attr("cy", d => (10-d.y)*80)
+            .attr("r", 5)
+            .attr("fill", d => color(d.cluster))
+            .on("click", (event, d) => {
+                window.open(d.url, '_blank');
+            })
+            .on("mouseover", (event, d) => {
+                tooltip.transition()
+                    .duration(200)
+                    .style("opacity", 1);
+                tooltip.html(`Company: ${d.text}<br>Cluster: ${d.cluster}`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px");
+            })
+            .on("mouseout", () => {
+                tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            });
+    </script>
+</body>
+</html>
